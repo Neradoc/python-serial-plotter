@@ -1,7 +1,11 @@
-import serial, re, math
+import serial, re, math, sys
 from serial.tools.list_ports import comports
 
 test_port = "/dev/tty.usbmodem7CDFA103B7B41"
+if len(sys.argv) > 1:
+	test_port = sys.argv[1]
+
+print(test_port)
 
 colors = [
 	(255,0,0),
