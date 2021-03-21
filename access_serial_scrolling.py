@@ -2,6 +2,10 @@ import serial, re, math, sys, time
 import pygame
 
 test_port = "/dev/tty.usbmodem7CDFA103B7B41"
+if len(sys.argv) > 1:
+	test_port = sys.argv[1]
+
+print(test_port)
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -190,7 +194,7 @@ while running:
 	try:
 		if channel == None:
 			channel = serial.Serial(args.port)
-			channel.timeout = 1
+			channel.timeout = 0.05
 		line = channel.readline()[:-2]
 	except KeyboardInterrupt:
 		print("KeyboardInterrupt")
@@ -201,11 +205,12 @@ while running:
 			channel.close()
 			channel = None
 		print("Exception on read, did the board disconnect ?")
+		time.sleep(1)
 		continue
 	# the board sent "reset" to says it has reset
 	if line == b"reset":
 		print("SENT RESET")
-	m = re.match(b'^\(([\d.-]+)(, *[\d.-]+)*\)$',line)
+	m = re.match(b'^\( *([\d.-]+) *(, *[\d.-]+)* *\)$',line.replace(b' ',b''))
 	if not m: continue
 	# we have values !
 	thisVal = [float(x) for x in re.findall(b'[\d.-]+',line)]
