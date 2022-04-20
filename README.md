@@ -1,7 +1,7 @@
 # python-serial-plotter
 A terrible no good slow bad looking serial plotter using pygame.
 
-Pip install: pygame, matplotlib, pyserial.
+Pip install: `pygame`, `matplotlib`, `pyserial`.
 
 Call it with:
 ```sh
