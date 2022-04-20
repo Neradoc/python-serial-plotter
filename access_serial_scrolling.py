@@ -83,7 +83,7 @@ def calcpos(val,vmin,vmax):
 from views import textmobile
 listButtons = [
 	textmobile.TextMobile((0,0), "Center", background=COLOR_WHITE, border=borderColor, fontsize=16, corner=8, id="c"),
-	textmobile.TextMobile((0,0), "Axes Communs", background=COLOR_WHITE, border=borderColor, fontsize=16, corner=8, id="m"),
+	textmobile.TextMobile((0,0), "Common Scale", background=COLOR_WHITE, border=borderColor, fontsize=16, corner=8, id="m"),
 ]
 for x in range(1,10):
 	listButtons.append(textmobile.TextMobile((0,0), str(x), background=colors[x-1], border=borderColor, fontsize=16, corner=8, id=str(x)))
@@ -195,12 +195,12 @@ while running:
 		if channel == None:
 			channel = serial.Serial(args.port)
 			channel.timeout = 0.05
-		line = channel.readline()[:-2]
+		line = channel.readline().strip()
 	except KeyboardInterrupt:
 		print("KeyboardInterrupt")
 		running = False
 		break
-	except:
+	except Exception:
 		if channel != None:
 			channel.close()
 			channel = None
@@ -211,7 +211,10 @@ while running:
 	if line == b"reset":
 		print("SENT RESET")
 	m = re.match(b'^\( *([\d.-]+) *(, *[\d.-]+)* *\)$',line.replace(b' ',b''))
-	if not m: continue
+	if not m:
+		if line:
+			print("Unknown:", line)
+		continue
 	# we have values !
 	thisVal = [float(x) for x in re.findall(b'[\d.-]+',line)]
 	
