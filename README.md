@@ -7,3 +7,5 @@ Call it with:
 ```sh
 python access_serial_scrolling.py SERIAL_PORT
 ```
+
+Code is under MIT license. Roboto font is under the Apache License.

@@ -35,7 +35,7 @@ class TextMobile(mobile.Mobile):
 		self.corner = corner
 		# font name
 		if fontname == None:
-			self.font = pygame.font.Font("fonts/freesansbold.ttf",fontsize)
+			self.font = pygame.font.Font("fonts/Roboto-Medium.ttf",fontsize)
 		else:
 			self.font = pygame.font.Font(font,fontsize)
 		# identifier for comparison
