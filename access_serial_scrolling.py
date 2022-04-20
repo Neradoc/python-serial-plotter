@@ -194,8 +194,11 @@ while running:
 	try:
 		if channel == None:
 			channel = serial.Serial(args.port)
-			channel.timeout = 0.05
+			channel.timeout = 0.01
 		line = channel.readline().strip()
+		# just skip empty values
+		if line == b"":
+			continue
 	except KeyboardInterrupt:
 		print("KeyboardInterrupt")
 		running = False
@@ -210,13 +213,19 @@ while running:
 	# the board sent "reset" to says it has reset
 	if line == b"reset":
 		print("SENT RESET")
-	m = re.match(b'^\( *([\d.-]+) *(, *[\d.-]+)* *\)$',line.replace(b' ',b''))
-	if not m:
+	# parenthesis or brackets optional
+	line = re.sub(b"^\((.*)\)|\[(.*)\]$", r"\1", line)
+	# values separated by a coma or whitespace(s)
+	lines = re.split(b"[,\s]+", line)
+	# interpret the numbers as floats
+	try:
+		thisVal = [float(x) for x in lines]
+	except ValueError:
+		# show unknown values (REPL printouts like auto-reload)
 		if line:
 			print("Unknown:", line)
 		continue
 	# we have values !
-	thisVal = [float(x) for x in re.findall(b'[\d.-]+',line)]
 	
 	if pauseGraph: continue
 	if blankDraw: thisVal = []
