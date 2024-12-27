@@ -1,9 +1,11 @@
 import serial, re, math, sys
 from serial.tools.list_ports import comports
 
-test_port = "/dev/tty.usbmodem7CDFA103B7B41"
+test_port = None
 if len(sys.argv) > 1:
 	test_port = sys.argv[1]
+else:
+	print("Port missing, please provide port.")
 
 print(test_port)
 
@@ -59,6 +61,7 @@ while running:
 	if not m: continue
 	
 	l = [float(x) for x in re.findall(b'[\d.]+',line)]
+	print(l)
 	current = [val * gheight/255 + gtop for val in l]
 	if previous == None: previous = current
 	if position == 0: previous = current

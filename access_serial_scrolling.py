@@ -1,9 +1,11 @@
 import serial, re, math, sys, time
 import pygame
 
-test_port = "/dev/tty.usbmodem7CDFA103B7B41"
+test_port = None
 if len(sys.argv) > 1:
 	test_port = sys.argv[1]
+else:
+	print("Port missing, please provide port.")
 
 print(test_port)
 
@@ -220,6 +222,7 @@ while running:
 	# interpret the numbers as floats
 	try:
 		thisVal = [float(x) for x in lines]
+		print(f"Values received: {thisVal}")
 	except ValueError:
 		# show unknown values (REPL printouts like auto-reload)
 		if line:
